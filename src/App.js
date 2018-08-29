@@ -22,32 +22,44 @@ componentDidMount() {
     // you can access your data 
      
     let events = data.map((event) =>{
+      const colors = {
+        "red":"#DC143C",
+        "cyan":"#00FFFF",
+        "blue":"#87CEFA",
+        "pink":"#FF69B4",
+        "grey":"#808080",
+        "green":"#008000"
+     }
       const start = event.start.substr(0, 10).split('-') ;
       const end = event.end.substr(0, 10).split('-');
         let obj = {
           title: event.label,
           start:  new Date(Number(start[0]), Number(start[1]), Number(start[2])),
           end:  new Date(Number(end[0]), Number(end[1]), Number(end[2])),
-           
+          color: colors[event.category]
         }
-          return obj;
+         
+            
+             return obj;
     });
       this.setState({ data: events});
+      console.log(events.color);
 
 })
  }
  eventStyleGetter(event, start, end, isSelected) {
+         
     
     var backgroundColor = "#FF69B4";
     var style = {
-        backgroundColor: backgroundColor,
+        backgroundColor: event.color,
         borderRadius: '0px',
         opacity: 0.8,
         color: 'white',
         border: '0px',
         display: 'block'
     };
-     console.log(event.title);
+      
     return {
         style: style
     };
