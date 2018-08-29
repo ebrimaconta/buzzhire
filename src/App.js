@@ -17,20 +17,43 @@ componentDidMount() {
     // fetch data and update state
     this.setState({ data: data}) 
  }
+ eventStyleGetter(event, start, end, isSelected) {
+    
+    var backgroundColor = "#FF69B4";
+    var style = {
+        backgroundColor: backgroundColor,
+        borderRadius: '0px',
+        opacity: 0.8,
+        color: 'white',
+        border: '0px',
+        display: 'block'
+    };
+     
+    return {
+        style: style
+    };
+}
 render(){
-   
-            console.log(data);
+   console.log(this.state.data);
+             
     return (
             <BigCalendar
                 culture='en'
                   events={ [
                     {
                       'title': 'All Day Event very long title',
-                      'bgColor': 'red',
+                      'bgColor': 'FF69B4',
                       'allDay': true,
                       'start': new Date(2018, 7, 8),
                       'end': new Date(2018,9 , 11)
-                    } ]}
+                    },{
+                      'title': 'All Day Event very long title',
+                      'bgColor': 'FF69B4',
+                      'allDay': true,
+                      'start': new Date(2018, 6, 8),
+                      'end': new Date(2018,6 , 11)
+                    }  ]}
+                    eventPropGetter={(this.eventStyleGetter)}
                 defaultDate={new Date()}/>
     );
 }
