@@ -15,12 +15,9 @@ class App extends Component {
 componentDidMount() {
     // fetch data and update state
     fetch("https://assessments.bzzhr.net/calendar/?format=json")
-   .then(function(response) {
-    return response.json();
-  })
-  .then(data => {
+   .then(response => response.json())
+   .then(data => {
     // you can access your data 
-     
     let events = data.map((event) =>{
       const colors = {
         "red":"#DC143C",
@@ -37,19 +34,14 @@ componentDidMount() {
           start:  new Date(Number(start[0]), Number(start[1]), Number(start[2])),
           end:  new Date(Number(end[0]), Number(end[1]), Number(end[2])),
           color: colors[event.category]
-        }
-         
-            
+        }            
              return obj;
     });
       this.setState({ data: events});
-      console.log(events.color);
-
-})
+  })
  }
  eventStyleGetter(event, start, end, isSelected) {
-         
-    
+
     var backgroundColor = "#FF69B4";
     var style = {
         backgroundColor: event.color,
@@ -70,8 +62,8 @@ render(){
     return (
             <BigCalendar
                 culture='en'
-                  events={ this.state.data}
-                    eventPropGetter={(this.eventStyleGetter)}
+                events={ this.state.data}
+                eventPropGetter={(this.eventStyleGetter)}
                 defaultDate={new Date()}/>
     );
 }
