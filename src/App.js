@@ -39,7 +39,6 @@ componentDidMount() {
        return obj;
     });
       this.setState({ data: events});
-
 })
  }
  eventStyleGetter(event, start, end, isSelected) {
