@@ -8,26 +8,40 @@ BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 class App extends Component {
   constructor(props) {
    super(props)
-
-   let date = new Date();
-   let Year =  date.getFullYear();  
-   let Month =  date.getMonth();  
-   let LastDayMonth = new Date(Year , Month + 2, 0);
-   let LastYear =  LastDayMonth.getFullYear();  
-   let LastMonth =  LastDayMonth.getMonth(); 
-   let LastDay = LastDayMonth.getDate(); 
-   console.log("https://assessments.bzzhr.net/calendar/?before="+LastYear+"-0"+LastMonth+"-"+LastDay+"T00%3A00%3A00&format=json&since=2018-0"+(Month+1)+"-01T00%3A00%3A00");
     this.state = {
-      data: [],
-      date : "https://assessments.bzzhr.net/calendar/?before="+LastYear+"-0"+LastMonth+"-"+LastDay+"T00%3A00%3A00&format=json&since=2018-0"+(Month+1)+"-01T00%3A00%3A00"
+    data: [],
+    date : ""
     }
     BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
   }
   componentDidUpdate(){
-    
+      const that = this;
+     var next = document.getElementById("next");
+     next.addEventListener("click", ()=>{
+      that.date.setDate(that.date.getDate() + Number(30));
+      console.log(that.Month);
+     }, false);
   }
   componentDidMount() {
-    fetch(this.state.date)
+     this.DataCall();
+    }
+
+    DateCall(NumberDate){
+        let date = new Date();
+        date.setDate(date.getDate() + Number(NumberDate));
+        let Year =   date.getFullYear();  
+        let Month =   date.getMonth();  
+        let LastDayMonth = new Date( Year ,  Month + 2, 0);
+        let LastYear =   LastDayMonth.getFullYear();  
+        let LastMonth =   .LastDayMonth.getMonth() > 9 ?  LastDayMonth.getMonth() : "0"+ .LastDayMonth.getMonth(); 
+        let LastDay =  .LastDayMonth.getDate(); 
+        let addToMonth = ( Month+1);
+        let WebMonth = addToMonth   > 9 ?  addToMonth : "0"+ .addToMonth;
+        let string= "https://assessments.bzzhr.net/calendar/?before="+LastYear+"-"+ LastMonth+"-"+ LastDay+"T00%3A00%3A00&format=json&since=2018-"+ WebMonth+"-01T00%3A00%3A00";
+        this.setState({date:string});
+    }
+  DataCall(){
+   fetch(this.state.date)
    .then(response => response.json())
    .then(data => {
      let events =   data.results.map((event) =>{
@@ -49,9 +63,10 @@ class App extends Component {
         }
        return obj;
      })
-     this.setState({data:events});
-    })
-   }
+     this.setState({
+      data:events});
+   })
+  }
 
   eventStyleGetter(event, start, end, isSelected) {
     var style = {
