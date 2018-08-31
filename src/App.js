@@ -16,29 +16,38 @@ class App extends Component {
   }
   componentDidUpdate(){
       const that = this;
+      let thirty = 30;
      var next = document.getElementById("next");
      next.addEventListener("click", ()=>{
-      that.date.setDate(that.date.getDate() + Number(30));
-      console.log(that.Month);
+     
+      thirty +=30;
+      let nextClicked= that.DateCall(thirty);
+      console.log(nextClicked);
+    
      }, false);
   }
   componentDidMount() {
-     this.DataCall();
+     
+     this.DataCall(0);
     }
-
+  componentWillMount() {
+     let firstString = this.DateCall(0);
+      
+     this.setState({date:firstString});
+    }
     DateCall(NumberDate){
         let date = new Date();
-        date.setDate(date.getDate() + Number(NumberDate));
+        date.setDate(date.getDate() +  NumberDate);
         let Year =   date.getFullYear();  
         let Month =   date.getMonth();  
         let LastDayMonth = new Date( Year ,  Month + 2, 0);
         let LastYear =   LastDayMonth.getFullYear();  
-        let LastMonth =   .LastDayMonth.getMonth() > 9 ?  LastDayMonth.getMonth() : "0"+ .LastDayMonth.getMonth(); 
-        let LastDay =  .LastDayMonth.getDate(); 
-        let addToMonth = ( Month+1);
-        let WebMonth = addToMonth   > 9 ?  addToMonth : "0"+ .addToMonth;
-        let string= "https://assessments.bzzhr.net/calendar/?before="+LastYear+"-"+ LastMonth+"-"+ LastDay+"T00%3A00%3A00&format=json&since=2018-"+ WebMonth+"-01T00%3A00%3A00";
-        this.setState({date:string});
+        let LastMonth =   LastDayMonth.getMonth() > 9 ?  LastDayMonth.getMonth() : "0"+ LastDayMonth.getMonth(); 
+        let LastDay =  LastDayMonth.getDate(); 
+        let WebMonth = Month   > 9 ?  Month : "0"+ Month;
+        let string= "https://assessments.bzzhr.net/calendar/?before="+LastYear+"-"+ LastMonth+"-"+ (LastDay-1)+"T00%3A00%3A00&format=json&since=2018-"+ WebMonth+"-01T00%3A00%3A00";
+         return string;
+        
     }
   DataCall(){
    fetch(this.state.date)
