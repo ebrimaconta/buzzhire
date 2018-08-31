@@ -14,37 +14,44 @@ class App extends Component {
     }
     BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
   }
-  componentDidUpdate(){
-      const that = this;
-      let thirty = 30;
+  componentDidUpdate(prevProps, prevState){
+    console.log(prevState,prevState )
+     const that = this;
+     let thirty = 30;
      var next = document.getElementById("next");
-     next.addEventListener("click", ()=>{
-     
+      next.addEventListener("click", ()=>{
       thirty +=30;
-      let nextClicked= that.DateCall(thirty);
-      console.log(nextClicked);
-    
+      let nextClicked = that.ChangeDate(thirty);
+      that.setState({date:nextClicked});
+      }, false);
+      var back = document.getElementById("previous");
+      back.addEventListener("click", ()=>{
+      thirty -=30;
+      let nextClicked = that.ChangeDate(thirty);
+      that.setState({date:nextClicked});
+      that.DataCall();
      }, false);
+      
   }
   componentDidMount() {
-     
-     this.DataCall(0);
+     this.DataCall();
     }
   componentWillMount() {
-     let firstString = this.DateCall(0);
+     let firstString = this.ChangeDate(0);
       
      this.setState({date:firstString});
     }
-    DateCall(NumberDate){
+    ChangeDate(NumberDate){
         let date = new Date();
         date.setDate(date.getDate() +  NumberDate);
         let Year =   date.getFullYear();  
         let Month =   date.getMonth();  
         let LastDayMonth = new Date( Year ,  Month + 2, 0);
         let LastYear =   LastDayMonth.getFullYear();  
-        let LastMonth =   LastDayMonth.getMonth() > 9 ?  LastDayMonth.getMonth() : "0"+ LastDayMonth.getMonth(); 
+        let LastMonth =   LastDayMonth.getMonth() > 9 ?  LastDayMonth.getMonth() :  
+        LastDayMonth.getMonth()  === 0 ? LastDayMonth.getMonth() +1 :"0"+ LastDayMonth.getMonth(); 
         let LastDay =  LastDayMonth.getDate(); 
-        let WebMonth = Month   > 9 ?  Month : "0"+ Month;
+        let WebMonth = Month  > 9 ?  Month : Month === 0 ? Month +1 :"0"+ Month; 
         let string= "https://assessments.bzzhr.net/calendar/?before="+LastYear+"-"+ LastMonth+"-"+ (LastDay-1)+"T00%3A00%3A00&format=json&since=2018-"+ WebMonth+"-01T00%3A00%3A00";
          return string;
         
@@ -61,7 +68,7 @@ class App extends Component {
         "pink":"#FF69B4",
         "grey":"#808080",
         "green":"#008000"
-     }
+       }
        const start = event.start.substr(0, 10).split('-') ;
        const end = event.end.substr(0, 10).split('-');
         let obj = {
