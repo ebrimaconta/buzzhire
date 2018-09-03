@@ -10,38 +10,55 @@ class App extends Component {
    super(props)
     this.state = {
     data: [],
-    date : ""
+    date : []
     }
     BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
   }
-  componentDidUpdate(prevProps, prevState){
-    console.log(prevState,prevState )
+  // shouldComponentUpdate(prevProps, prevState){
+  //    // const that = this;
+  //    // let thirty = 30;
+  //    // let  next = document.getElementById("next");
+  //    //  let nextClicked = next.addEventListener("click", ()=>{
+  //    //  thirty +=30;
+  //    //  return  that.ChangeDate(thirty);
+  //    //  });
+        
+  //    //  var back = document.getElementById("previous");
+  //    //  back.addEventListener("click", ()=>{
+  //    //  thirty -=30;
+  //    //  let nextClicked = that.ChangeDate(thirty);
+  //    //  that.setState({date:nextClicked});
+  //    // }, false);
+  // }
+  changeState(){
      const that = this;
      let thirty = 30;
-     var next = document.getElementById("next");
-      next.addEventListener("click", ()=>{
-      thirty +=30;
-      let nextClicked = that.ChangeDate(thirty);
-      that.setState({date:nextClicked});
-      }, false);
-      var back = document.getElementById("previous");
-      back.addEventListener("click", ()=>{
-      thirty -=30;
-      let nextClicked = that.ChangeDate(thirty);
-      that.setState({date:nextClicked});
-      that.DataCall();
-     }, false);
-      
+     let  next = document.getElementById("next");
+     if(next){
+       // let nextClicked = next.addEventListener("click", ()=>{
+       // thirty +=30;
+       // let nextClicked =   that.ChangeDate(thirty);
+       //   // that.setState({date:nextClicked});
+       // });
+       // that.setState({date:"nextClicked"});
+
+     }
+     
+  }
+  componentDidUpdate(prevProps, prevState){
+      console.log(prevState.date !== this.state.date );
+      console.log("user");
   }
   componentDidMount() {
-     this.DataCall();
+    let firstString = this.ChangeDate(0);
+     this.setState({date:firstString});
+     // this.DataCall();
     }
   componentWillMount() {
-     let firstString = this.ChangeDate(0);
-      
-     this.setState({date:firstString});
+     // let firstString = this.ChangeDate(0);
+     // this.setState({date:firstString});
     }
-    ChangeDate(NumberDate){
+  ChangeDate(NumberDate){
         let date = new Date();
         date.setDate(date.getDate() +  NumberDate);
         let Year =   date.getFullYear();  
@@ -53,14 +70,13 @@ class App extends Component {
         let LastDay =  LastDayMonth.getDate(); 
         let WebMonth = Month  > 9 ?  Month : Month === 0 ? Month +1 :"0"+ Month; 
         let string= "https://assessments.bzzhr.net/calendar/?before="+LastYear+"-"+ LastMonth+"-"+ (LastDay-1)+"T00%3A00%3A00&format=json&since=2018-"+ WebMonth+"-01T00%3A00%3A00";
-         return string;
-        
+        return string;
     }
   DataCall(){
-   fetch(this.state.date)
-   .then(response => response.json())
-   .then(data => {
-     let events =   data.results.map((event) =>{
+    fetch(this.state.date)
+    .then(response => response.json())
+    .then(data => {
+     let events = data.results.map((event) =>{
       const colors = {
         "red":"#DC143C",
         "cyan":"#00FFFF",
@@ -79,9 +95,10 @@ class App extends Component {
         }
        return obj;
      })
-     this.setState({
-      data:events});
+     this.setState({data:events});
    })
+   // console.log(addEvents);
+   
   }
 
   eventStyleGetter(event, start, end, isSelected) {
@@ -96,6 +113,7 @@ class App extends Component {
     return {style: style};
   }
  render(){   
+  {this.changeState()}
     return (
             <BigCalendar
               culture='en'
@@ -104,9 +122,7 @@ class App extends Component {
               defaultDate={new Date()}
               onView={(view) => {
                if(view === "month"){
-
                }else{
-
                }
               }}
               /> )
